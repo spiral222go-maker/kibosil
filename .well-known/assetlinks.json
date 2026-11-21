@@ -1,0 +1,17 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kibosil.app",
+      "sha256_cert_fingerprints": [
+        "C8:1E:BB:7E:4D:0C:14:34:8B:01:F7:CE:5F:18:F8:CA:A4:18:52:12:BB:7E:29:C0:90:1D:0B:5E:64:07:D2:4E",
+        "FD:5A:7C:C8:76:A8:DC:A7:2E:83:6B:85:8B:A0:4B:74:D8:66:21:48:33:59:01:95:BE:5F:1A:1C:9F:9A:E7:63",
+        "5E:22:3B:F0:6B:8D:7C:6B:98:F0:DB:BE:B7:2A:34:F9:A5:FB:0B:33:27:3A:1D:C9:C8:11:1C:F4:B8:61:4D:92"
+      ]
+    }
+  }
+]
