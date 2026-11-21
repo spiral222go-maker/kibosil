@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client; frame-src https://accounts.google.com/gsi/; connect-src https://api.kibosil.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기보실 계정 지우기 · Delete Kibosil account</title>
+<!-- 앱 밖에서 계정을 지우는 길(플레이 정책) — cloud/app.py가 /delete로 낸다. **본인 확인(패스키 · 구글)을 한 뒤에만 지운다**
+     (외부 설계 검토 B9 ② — 계정 번호만 받으면 남의 번호로 지울 수 있다). docs/plan-0.4.md -->
+<style>
+  :root { --bg:#f7f6f2; --fg:#1d1d1b; --dim:#66645e; --line:#d9d6cc; --accent:#2d5b46; --danger:#b3261e; --card:#fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141412; --fg:#ecebe6; --dim:#a19e95; --line:#34332f; --accent:#7fb89c; --danger:#ef7a6f; --card:#1d1c1a; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, "Malgun Gothic", sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:22px; margin:0 0 12px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin:14px 0; }
+  .dim { color:var(--dim); font-size:14px; }
+  button { font:inherit; padding:10px 16px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--fg); cursor:pointer; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.danger { background:var(--danger); border-color:var(--danger); color:#fff; }
+  button:disabled { opacity:.5; cursor:default; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  #msg { min-height:1.6em; }
+  [hidden] { display:none !important; }
+  ul { padding-left:20px; margin:6px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1 data-ko="기보실 계정 지우기" data-en="Delete your Kibosil account"></h1>
+  <div class="card">
+    <div data-ko="지우면 기보실 서버에 있는 것이 모두 지워지고 되돌릴 수 없습니다:" data-en="Deleting removes everything Kibosil keeps on its server, and it can't be undone:"></div>
+    <ul>
+      <li data-ko="계정 · 패스키 · 구글 로그인 묶음" data-en="Your account, passkeys and Google sign-in link"></li>
+      <li data-ko="서버에 백업한 기보" data-en="Games backed up to the server"></li>
+      <li data-ko="서버 분석 기록과 결과" data-en="Server analysis jobs and results"></li>
+    </ul>
+    <div class="dim" data-ko="폰에 저장된 기보 · 기록은 그대로 남습니다(앱을 지우면 함께 지워집니다). 구독은 플레이 스토어에서 따로 해지해야 합니다. 앱 안에서는 설정 → 계정 → 「계정 지우기」로도 지울 수 있습니다."
+         data-en="Games and records stored on your phone stay (they go away when you uninstall the app). Subscriptions must be cancelled separately in the Play Store. In the app you can also delete it in Settings → Account → &quot;Delete account&quot;."></div>
+  </div>
+
+  <div class="card" id="stepAuth">
+    <b data-ko="1. 본인 확인" data-en="1. Confirm it's you"></b>
+    <div class="dim" data-ko="앱에서 로그인한 방법으로 확인해 주세요." data-en="Sign in the same way you did in the app."></div>
+    <div class="row" style="margin-top:10px">
+      <button id="btnPasskey" data-ko="패스키로 확인" data-en="Confirm with passkey"></button>
+      <div id="googleBtn"></div>
+    </div>
+  </div>
+
+  <div class="card" id="stepDelete" hidden>
+    <b data-ko="2. 지우기" data-en="2. Delete"></b>
+    <div id="who" style="margin:6px 0"></div>
+    <button class="danger" id="btnDelete" data-ko="계정과 서버의 기록을 모두 지우기" data-en="Delete my account and all server data"></button>
+  </div>
+
+  <div id="msg" role="status"></div>
+</main>
+<script>
+const GOOGLE_CLIENT_ID = "552596330845-1edhmahl9ahf3vql5ub5pbt46o67pjfv.apps.googleusercontent.com";
+// 서버 주소 — 서버가 직접 낼 때는 같은 곳(""), 깃허브 페이지(kibosil.com/delete)에 둘 때는 api.kibosil.com(legal/site/make_site.py가 채운다)
+const API = "https://api.kibosil.com";
+const KO = (navigator.language || '').toLowerCase().startsWith('ko');
+document.documentElement.lang = KO ? 'ko' : 'en';
+document.querySelectorAll('[data-ko]').forEach(el => { el.innerHTML = KO ? el.dataset.ko : el.dataset.en; });
+const say = (ko, en) => { document.getElementById('msg').textContent = KO ? ko : en; };
+let token = null;
+
+const b64u = {
+  dec: s => { s = String(s).replace(/-/g, '+').replace(/_/g, '/'); while(s.length % 4) s += '='; return Uint8Array.from(atob(s), c => c.charCodeAt(0)).buffer; },
+  enc: buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
+};
+async function api(method, path, body){
+  const r = await fetch(API + path, {method, headers: Object.assign({'Content-Type': 'application/json'}, token ? {Authorization: 'Bearer ' + token} : {}),
+                                body: body === undefined ? undefined : JSON.stringify(body)});
+  let d = null; try{ d = await r.json(); }catch(e){}
+  return d || {ok: false};
+}
+async function signedIn(d){
+  if(!d || !d.ok || !d.token){ say((d && d.error) || '확인하지 못했습니다 — 다시 해 주세요.', 'Could not confirm — please try again.'); return; }
+  token = d.token;
+  const me = await api('GET', '/v1/me');
+  if(!me.ok){ say(me.error || '계정을 읽지 못했습니다.', 'Could not read the account.'); return; }
+  const n = (me.backup && me.backup.games) || 0;
+  document.getElementById('who').textContent = KO ? `계정 번호 ${me.id} · 서버 백업 ${n}판` : `Account ${me.id} · ${n} games backed up`;
+  document.getElementById('stepAuth').hidden = true;
+  document.getElementById('stepDelete').hidden = false;
+  say('', '');
+}
+
+document.getElementById('btnPasskey').onclick = async () => {
+  if(!(window.PublicKeyCredential && navigator.credentials)){ say('이 브라우저에서는 패스키를 쓸 수 없습니다.', "This browser can't use passkeys."); return; }
+  const o = await api('POST', '/v1/auth/passkey/login/options', {});
+  if(!o.ok){ say(o.error || '시작하지 못했습니다.', 'Could not start.'); return; }
+  const pk = Object.assign({}, o.options, {challenge: b64u.dec(o.options.challenge)});
+  if(pk.allowCredentials) pk.allowCredentials = pk.allowCredentials.map(c => Object.assign({}, c, {id: b64u.dec(c.id)}));
+  let cred;
+  try{ cred = await navigator.credentials.get({publicKey: pk}); }catch(e){ say('패스키 확인을 마치지 못했습니다.', "The passkey check didn't finish."); return; }
+  const r = cred.response, out = {id: cred.id, rawId: b64u.enc(cred.rawId), type: cred.type, response: {clientDataJSON: b64u.enc(r.clientDataJSON)}};
+  for(const k of ['authenticatorData', 'signature', 'userHandle']) if(r[k]) out.response[k] = b64u.enc(r[k]);
+  signedIn(await api('POST', '/v1/auth/passkey/login/verify', {credential: out}));
+};
+
+if(GOOGLE_CLIENT_ID){
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+  s.onload = () => {
+    google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: async r => signedIn(await api('POST', '/v1/auth/google', {idToken: r.credential}))});
+    google.accounts.id.renderButton(document.getElementById('googleBtn'), {theme: 'outline', size: 'large', locale: KO ? 'ko' : 'en'});
+  };
+  document.head.appendChild(s);
+}
+
+document.getElementById('btnDelete').onclick = async () => {
+  const ok = confirm(KO ? '정말 지울까요? 되돌릴 수 없습니다.' : "Delete for good? This can't be undone.");
+  if(!ok) return;
+  const btn = document.getElementById('btnDelete');
+  btn.disabled = true;
+  const d = await api('DELETE', '/v1/me');
+  if(d.ok && d.deleted){
+    token = null;
+    document.getElementById('stepDelete').hidden = true;
+    say('지웠습니다. 기보실 서버에 남은 것이 없습니다.', 'Deleted. Nothing is left on the Kibosil server.');
+  }else{
+    btn.disabled = false;
+    say(d.error || '지우지 못했습니다 — 다시 해 주세요.', 'Could not delete — please try again.');
+  }
+};
+</script>
+</body>
+</html>
