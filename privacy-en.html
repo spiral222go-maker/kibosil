@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kibosil Privacy Policy</title>
+<style>
+  :root{--bg:#f7f5f0;--text:#22201b;--dim:#6b665c;--line:#ddd7ca;--card:#ffffff;}
+  @media (prefers-color-scheme: dark){:root{--bg:#1b1916;--text:#ece6da;--dim:#a39b8c;--line:#3a352d;--card:#24211d;}}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;line-height:1.7;}
+  main{max-width:46rem;margin:0 auto;padding:2.5rem 16px 4rem;}
+  h1{font-size:1.6rem;margin:0 0 .25rem;}
+  .date{color:var(--dim);margin:0 0 2rem;}
+  h2{font-size:1.15rem;margin:2.2rem 0 .6rem;padding-bottom:.3rem;border-bottom:1px solid var(--line);}
+  p{margin:.6rem 0;}
+  .lead{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;}
+  .tbl{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;min-width:30rem;background:var(--card);}
+  th,td{border:1px solid var(--line);padding:.55rem .7rem;text-align:left;vertical-align:top;}
+  th{font-weight:600;}
+  a{color:inherit;}
+  ul{padding-left:1.3rem;}
+</style>
+</head>
+<body>
+<main>
+<h1>Kibosil Privacy Policy</h1>
+<p class="date">Effective: December 1, 2026 · First published: October 2, 2026 · <a href="privacy.html">한국어</a></p>
+<p class="date">This is a translation of the Korean policy. If the two differ, the Korean version governs.</p>
+
+<p class="lead">Kibosil (the "app") is made by Jounghyun Yoon (the "operator"). <b>If you don't sign in, none of your personal information goes to the operator.</b>
+Signing in is your choice. <b>Only for users who sign in</b>, the operator's server (section 2) keeps what's needed for the account and for server game backup.
+The phone app shows <b>Google AdMob ads</b>, and while ads are shown Google collects the information in section 6.</p>
+
+<h2>1. Without signing in — what the app handles and where it stays</h2>
+<div class="tbl"><table>
+  <tr><th>Data</th><th>Where it stays</th><th>Sent to the operator?</th></tr>
+  <tr><td>Games, analysis, game and training records, settings</td><td>Your phone or your PC</td><td>No</td></tr>
+  <tr><td>The key that links your phone and PC</td><td>Your phone and your PC</td><td>No</td></tr>
+  <tr><td>Camera image (scanning the link QR code)</td><td>Read on the phone and discarded right away</td><td>No (not stored)</td></tr>
+  <tr><td>Photos you pick to read a position</td><td>Your PC (when linked) or your phone</td><td>No</td></tr>
+</table></div>
+<p>When your phone is linked to your PC, the two talk <b>directly over the same Wi-Fi</b>, not through the operator's server.
+If you installed Tailscale yourself to use it away from home, that connection follows Tailscale's own terms and policy.</p>
+
+<h2>2. When you sign in — what the operator's server handles</h2>
+<p>When you sign in with a passkey or a Google account in Settings → Account, the operator's server handles the following.
+<b>No passwords are used.</b></p>
+<div class="tbl"><table>
+  <tr><th>Information</th><th>Used for</th><th>Kept for</th></tr>
+  <tr><td>Account number (a random number made by the server)</td><td>Telling accounts apart</td><td>Until you delete the account</td></tr>
+  <tr><td>Passkey public key, ID and use count</td><td>Checking passkey sign-in. The passkey's private key stays on your device and never reaches the server</td><td>Until you delete the account</td></tr>
+  <tr><td>A one-way transformed value of your Google account ID</td><td>Checking Google sign-in. Only the account ID is used from what Google sends; <b>email, name and photo are not stored</b></td><td>Until you delete the account</td></tr>
+  <tr><td>Games you back up to the server — moves, game information (player names, date, event, notes, etc.) and analysis</td><td>Backing up and restoring games (e.g. on a new phone)</td><td>Until you delete that backup or the account</td></tr>
+  <tr><td>Access log — IP address, time, account number, the feature requested and its result</td><td>Preventing abuse and attacks, finding errors</td><td>30 days</td></tr>
+</table></div>
+<p>Server game backup only runs after you sign in and turn it on (it's off by default). If a game names other people (such as your opponent),
+those names are backed up with it — clear the player fields of that game or turn backup off if you don't want that.</p>
+<p>The operator uses this information only to provide the sign-in and backup you asked for and to run the service safely.
+It is not sold or given to anyone else, and it is not used for ads.</p>
+
+<h2>3. Where the server is and who runs it for us</h2>
+<ul>
+  <li><b>Server:</b> in the Seoul region of Google Cloud (Republic of Korea). The data in section 2 and the access logs are kept in the Seoul region too.
+    A copy of the server data is made once a day and kept for 7 days.</li>
+  <li><b>Processor:</b> the operator does not run its own server hardware; Google Cloud runs the server on the operator's behalf.
+    <div class="tbl"><table>
+      <tr><th>Processor</th><td>Google Cloud Korea LLC (Google Cloud, <a href="https://cloud.google.com/terms/cloud-privacy-notice">Google Cloud Privacy Notice</a>)</td></tr>
+      <tr><th>Work</th><td>Running the server and storing the data in section 2 and the access logs (Seoul region)</td></tr>
+      <tr><th>Period</th><td>Same as the retention periods in the table in section 2</td></tr>
+    </table></div></li>
+  <li><b>Google sign-in:</b> you sign in to Google directly in Google's sign-in window, and Google sends the operator only the sign-in confirmation.
+    That process follows the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
+</ul>
+
+<h2>4. Deleting</h2>
+<ul>
+  <li><b>In the app:</b> Settings → Account → "Delete account".</li>
+  <li><b>Outside the app:</b> at <a href="https://kibosil.com/delete">kibosil.com/delete</a>, confirm it's you the same way as in the app (passkey or Google), then delete.</li>
+</ul>
+<p>Deleting removes the account, passkeys and Google sign-in link, and the games backed up to the server right away. Anything left in the daily server copy
+(section 3) disappears within 7 days. Access logs are deleted after 30 days. Games and records stored on your phone stay (they go away when you uninstall the app).</p>
+
+<h2>5. How the information is protected</h2>
+<ul>
+  <li>The app and the server talk only over encrypted connections (HTTPS).</li>
+  <li>The server runs in a space separated from other data on the operator's computer, with only the permissions it needs. Its admin page can't be opened from outside that computer.</li>
+  <li>No passwords are collected (passkeys and Google sign-in). The keys that confirm a sign-in are signed to prevent forgery.</li>
+  <li>Bursts of requests and repeated failed checks are blocked, and access logs are used to watch for unusual access.</li>
+</ul>
+
+<h2>6. Ads (Google AdMob)</h2>
+<p>The banner ad at the bottom of the phone app is shown by Google LLC's AdMob. The PC program has no ads.
+To choose, show and measure ads, Google's ad component in the app (Google Mobile Ads SDK) sends the following <b>directly to Google</b>.</p>
+<div class="tbl"><table>
+  <tr><th>Information</th><th>Used for</th></tr>
+  <tr><td>Advertising ID and other device identifiers</td><td>Showing and personalizing ads, measuring ads, preventing invalid clicks</td></tr>
+  <tr><td>IP address (approximate location)</td><td>Showing ads, preventing invalid clicks</td></tr>
+  <tr><td>App usage related to ads (app launches, ad taps, etc.)</td><td>Measuring ads, analytics</td></tr>
+  <tr><td>Diagnostics (app launch time, etc.)</td><td>Checking errors in the ad component, analytics</td></tr>
+</table></div>
+<p>The operator doesn't receive this information — only <b>totals</b> such as how many times ads were shown and tapped.
+How Google uses it is described in
+<a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use our services</a> and the
+<a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+<p><b>To turn off personalized ads,</b> go to your phone's Settings → Privacy (or Google) → Ads and tap "Delete advertising ID".
+Ads still appear but are no longer personalized. You can also "Reset advertising ID" to get a new one.</p>
+<p>The app has no payments.</p>
+
+<h2>7. Downloads from elsewhere</h2>
+<p>When you analyze on the phone alone ("Without a PC, on this phone"), the app downloads the KataGo network file once from KataGo's official site
+(katagotraining.org). If you pick a kyu/dan AI, that network comes from the same place. Phones on which KataGo runs very slowly download a lighter older
+network from KataGo's GitHub release page (github.com). Like any web visit, those sites can see connection information (IP address, etc.), handled under
+each site's policy. The app sends nothing else about you in the process.</p>
+
+<h2>8. Contact</h2>
+<p>If you send an email through the app's "Report a problem · Contact" or to the address below, the operator receives that email address and content to reply.
+They are deleted one year after replying. A problem report file, if attached, contains app logs and PC information (operating system, graphics card) but no games.</p>
+
+<h2>9. Age</h2>
+<p>The app's store age rating is 13+. Because Google collects device identifiers for ads (section 6), <b>users under 14 should use the app with a
+parent's or guardian's consent</b>. The same applies to signing in and server game backup. Ads shown in the app are limited to Teen or lower.
+Users under 14 should also send contact emails together with a parent or guardian.</p>
+
+<h2>10. Your rights</h2>
+<p>You can see, correct, delete or stop the processing of your information at any time. You can see your account number and backed-up games in the app's
+Settings → Account and delete them as in section 4. Send other requests to the contact in section 11 and they will be handled without delay.</p>
+
+<h2>11. Privacy officer · contact</h2>
+<p>Privacy officer · operator: Jounghyun Yoon<br>Email: <a href="mailto:Sillogic222@gmail.com">Sillogic222@gmail.com</a></p>
+
+<h2>12. Changes</h2>
+<p>When this policy changes, notice is given on this page and in the app 7 days before it takes effect (30 days for changes unfavorable to users),
+and earlier versions remain available from the Korean page.</p>
+</main>
+</body>
+</html>
