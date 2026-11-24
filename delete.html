@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client; frame-src https://accounts.google.com/gsi/; connect-src https://api.kibosil.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client; frame-src https://accounts.google.com/gsi/; connect-src https://kibosil-api-552596330845.asia-northeast3.run.app https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>기보실 계정 지우기 · Delete Kibosil account</title>
 <!-- 앱 밖에서 계정을 지우는 길(플레이 정책) — cloud/app.py가 /delete로 낸다. **본인 확인(패스키 · 구글)을 한 뒤에만 지운다**
@@ -58,8 +58,8 @@
 </main>
 <script>
 const GOOGLE_CLIENT_ID = "552596330845-1edhmahl9ahf3vql5ub5pbt46o67pjfv.apps.googleusercontent.com";
-// 서버 주소 — 서버가 직접 낼 때는 같은 곳(""), 깃허브 페이지(kibosil.com/delete)에 둘 때는 api.kibosil.com(legal/site/make_site.py가 채운다)
-const API = "https://api.kibosil.com";
+// 서버 주소 — 서버가 직접 낼 때는 같은 곳(""), 깃허브 페이지(kibosil.com/delete)에 둘 때는 기보실 서버 주소 edition.DEFAULT_CLOUD(tools/make_site.py가 채운다)
+const API = "https://kibosil-api-552596330845.asia-northeast3.run.app";
 const KO = (navigator.language || '').toLowerCase().startsWith('ko');
 document.documentElement.lang = KO ? 'ko' : 'en';
 document.querySelectorAll('[data-ko]').forEach(el => { el.innerHTML = KO ? el.dataset.ko : el.dataset.en; });
